@@ -1,0 +1,143 @@
+/* HTML*/
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="./style.css">
+    <script src="./script.js" defer></script>   
+    
+    <title>Mario jump</title>
+</head>
+<body>
+    <div class="game-board">
+
+        <img src="./Imagens/pipe.png" class="pipe">
+        <img src="./Imagens/mario.gif" class="mario">
+        <img src="./Imagens/clouds.png" class="clouds"
+
+    </div>
+</body>
+</html>
+
+/* CSS */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  .game-board{
+    width: 100%;
+    height: 500px;
+    border-bottom: 15px solid green;
+    margin: 0 auto;
+    position: relative;
+    overflow: hidden; 
+    background: linear-gradient(#87CEEB, #E0F6FF);
+  }
+  
+  .pipe{
+      position: absolute;
+      bottom: 0;
+      width: 80px;
+      animation: pipe-animation 1.5s infinite linear;
+  } 
+  
+  .mario {
+      width: 150px;
+      position: absolute;
+      bottom: 0;
+  }
+  
+  .jump {
+      animation: jump 500ms ease-out;
+  }
+
+
+  .clouds{
+    position: absolute;
+    width: 550px;
+    animation: clouds-animation 15s infinite linear;
+  }
+
+  @keyframes pipe-animation {
+      from {
+          right: 0;
+      }
+  
+      to{
+          right: 100%;
+      }
+  
+  }
+  
+  @keyframes jump{
+      0% {
+          bottom: 0;
+      }
+  
+      40% {
+          bottom: 180px;
+      }
+  
+      50% {
+          bottom: 180px;
+      }
+  
+      60% {
+          bottom: 180px;
+      }
+  
+      100%{
+          bottom: 0;
+      }
+  }
+
+  @keyframes clouds-animation{
+    from{
+        right: -550px;
+    }
+    to{
+        right: 100%;
+    }
+  }
+
+/* JavaScript */
+
+const mario = document.querySelector(".mario");
+    const pipe = document.querySelector(".pipe");
+
+    const jump = () => {
+        mario.classList.add("jump");
+
+        setTimeout(() => {
+            mario.classList.remove("jump");
+        }, 500);
+    }
+
+    const loop = setInterval(() => {
+        const pipePosition = pipe.offsetLeft;
+        const marioPosition = +window.getComputedStyle(mario).bottom.replace('px', '');
+
+        if (pipePosition <= 120 && pipePosition > 0 && marioPosition < 80) {
+            pipe.style.animation = "none";
+            pipe.style.left = `${pipePosition}px`;
+
+            mario.style.animation = "none";
+            mario.style.bottom = `${marioPosition}px`;
+
+            mario.src = "./Imagens/game-over.png";
+            mario.style.width = "75px"
+            mario.style.marginLeft = "50px"
+
+            clearInterval(loop);
+
+        }
+
+    }, 10);
+
+    document.addEventListener("keydown", jump);
